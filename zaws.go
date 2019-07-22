@@ -14,6 +14,7 @@ import (
 	"net"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -221,7 +222,7 @@ func (z *Zaws) ShowEC2CloudwatchMetricsList() {
 	metrics := get_metric_list(z.AwsSession, "InstanceId", z.TargetId)
 	for _, metric := range metrics {
 		datapoints := get_metric_stats(z.AwsSession, "InstanceId", z.TargetId, *metric.MetricName, *metric.Namespace)
-		data := Data{MetricName: *metric.MetricName, MetricNamespace: *metric.Namespace}
+		data := Data{MetricName: strings.Replace(*metric.MetricName, "%", "", -1), MetricNamespace: *metric.Namespace}
 		if len(datapoints) > 0 {
 			data.MetricUnit = *datapoints[0].Unit
 		}
